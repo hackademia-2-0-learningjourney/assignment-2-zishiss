@@ -1,0 +1,65 @@
+import json
+import os
+
+
+stored_data = 'users.json'
+
+
+def load_users():
+    if os.path.exists(stored_data):
+        with open(stored_data, 'r') as file:
+            return json.load(file)
+    return {}
+
+
+def save_users(users):
+    with open(stored_data, 'w') as file:
+        json.dump(users, file, indent=4)
+
+
+def sign_up():
+    users = load_users()
+
+    username = input("Enter username: ")
+    if username in users:
+        print("Username already exists. Please choose a different user.")
+        return
+
+    password = input("Enter password: ")
+    mobile_number = input("Enter mobile number: ")
+
+    users[username] = {
+        'password': password,
+        'mobile_number': mobile_number
+    }
+
+    save_users(users)
+    print("Sign up complete!")
+
+def sign_in():
+    users = load_users()
+
+    username = input("Enter username: ")
+    password = input("Enter password: ")
+
+    if username in users and users[username]['password'] == password:
+        print(f"Welcome, {username}!")
+        print(f"mobile number: {users[username]['mobile_number']}")
+    else:
+        print("Incorrect input. Deleting existing data.")
+
+def main():
+    print("1. Sign up")
+    print("2. Sign in")
+    option = input("Enter your choice (1 or 2): ")
+
+    if option == '1':
+        sign_up()
+    elif option == '2':
+        sign_in()
+    else:
+        print("Invalid choice. Terminating program.")
+
+if __name__ == "main":
+    main() 
+    break
